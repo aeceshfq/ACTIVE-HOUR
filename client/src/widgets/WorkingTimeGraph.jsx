@@ -43,13 +43,13 @@ function WorkingTimeGraph() {
                     // Calculate break time for each hour
                     for (let hour = breakStartHour; hour <= breakEndHour; hour++) {
                         const breakDuration = (breakEndTime - breakStartTime) / (1000 * 60); // Convert milliseconds to minutes
-                        currentBreakTime[hour] += breakDuration;
+                        currentBreakTime[hour] += Math.floor(breakDuration);
                     }
                 });
             }
 
             // Calculate working time until now
-            const now = new Date();
+            const now = attendance.clockOutTime? new Date(attendance.clockOutTime): new Date();
             const startHour = clockInTime.getHours();
             const endHour = now.getHours();
             for (let hour = startHour; hour <= endHour; hour++) {
@@ -74,7 +74,7 @@ function WorkingTimeGraph() {
                 }
 
                 // Exclude break time from working time
-                currentWorkingTime[hour] = Math.max(0, workingTime - currentBreakTime[hour]);
+                currentWorkingTime[hour] = Math.floor(Math.max(0, workingTime - currentBreakTime[hour]));
             }
 
             setWorkingTime(currentWorkingTime);

@@ -89,11 +89,11 @@ export default function Attendance(){
                         {
                             attendance?.clockInTime && <div>
                                 <Typography>
-                                    You signed in today at {moment(attendance?.clockInTime).format("hh:mm:ss A")}
+                                    You signed in today at {moment(attendance?.clockInTime).format("hh:mm A")}
                                 </Typography>
                                 {
                                     attendance?.clockOutTime && <Typography>
-                                        You signed out today at {moment(attendance?.clockOutTime).format("hh:mm:ss A")}
+                                        You signed out today at {moment(attendance?.clockOutTime).format("hh:mm A")}
                                     </Typography>
                                 }
                             </div>
