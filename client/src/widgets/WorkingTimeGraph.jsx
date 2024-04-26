@@ -147,7 +147,7 @@ function WorkingTimeGraph() {
     }, [workingTime, breakTime, loading]);
 
     return (
-        <LegacyCard sectioned title="Working Time Graph">
+        <LegacyCard sectioned title="Working Time">
             <canvas id="workingTimeGraph" width="400" height="200"></canvas>
         </LegacyCard>
     );
