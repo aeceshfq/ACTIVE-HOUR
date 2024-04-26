@@ -117,7 +117,6 @@ export const useFetch = (url, options) => {
                 fetch_options = {...fetch_options, ...fetch_options.data}
             }
             var response = await httpRequest[options?.type??"get"](url, fetch_options);
-            console.log("response", response);
             if (response?.status === "success") {
                 setData(response?.data);
             } else {

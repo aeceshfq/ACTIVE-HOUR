@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useAuth } from "../providers/AuthProvider";
 import LegacyPage from "../subcomponents/LegacyPage";
 import Attendance from "../widgets/Attendance";
+import WorkingTimeGraph from "../widgets/WorkingTimeGraph";
+import Profile from "../widgets/Profile";
 
 export default function Home(){
     const { user } = useAuth();
@@ -15,8 +17,14 @@ export default function Home(){
     return(
         <LegacyPage>
             <Layout>
-                <Layout.Section oneForth>
-                    <Attendance />
+                <Layout.Section oneThird>
+                    <Stack direction="column" spacing={2}>
+                        <Profile />
+                        <Attendance />
+                    </Stack>
+                </Layout.Section>
+                <Layout.Section twoThird>
+                    <WorkingTimeGraph />
                 </Layout.Section>
             </Layout>
         </LegacyPage>

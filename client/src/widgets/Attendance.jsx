@@ -84,16 +84,16 @@ export default function Attendance(){
                 <LegacyCard.Section>
                     <Stack direction="column" spacing={2}>
                         {
-                            !attendance?.clockInTime && <Alert variant="outlined" severity="warning">You have not signed in today.</Alert>
+                            !attendance?.clockInTime && <Alert variant="outlined" severity="warning">You haven't checked in for attendance today!</Alert>
                         }
                         {
                             attendance?.clockInTime && <div>
                                 <Typography>
-                                    Signed in today at {moment(attendance?.clockInTime).format("hh:mm:ss A")}
+                                    You signed in today at {moment(attendance?.clockInTime).format("hh:mm:ss A")}
                                 </Typography>
                                 {
                                     attendance?.clockOutTime && <Typography>
-                                        Signed out today at {moment(attendance?.clockOutTime).format("hh:mm:ss A")}
+                                        You signed out today at {moment(attendance?.clockOutTime).format("hh:mm:ss A")}
                                     </Typography>
                                 }
                             </div>
