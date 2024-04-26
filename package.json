@@ -1,0 +1,27 @@
+{
+  "name": "nexatech",
+  "version": "1.0.2",
+  "private": true,
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.1",
+    "axios": "^1.6.7",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.1",
+    "commander": "^12.0.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "cron": "^2.4.4",
+    "dotenv": "^14.2.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^6.1.7",
+    "nodemon": "^3.1.0",
+    "request-ip": "^3.3.0",
+    "shopify-node-api": "^1.5.2",
+    "uuid": "^9.0.0"
+  },
+  "scripts": {
+    "start": "nodemon start ./server.js",
+    "com": "node com.js"
+  }
+}
