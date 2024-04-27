@@ -5,7 +5,7 @@ import { useFetch } from '../providers/AppProvider';
 import server_route_names from '../routes/server_route_names';
 import LegacyCard from '../subcomponents/LegacyCard';
 
-function WorkingTimeGraph() {
+function WorkingTimeGraph({ refresh }) {
     const today = FormatDate(new Date());
     const { data: attendance, loading, reFetch } = useFetch(`${server_route_names.attendance}?date=${today}`);
     const [workingTime, setWorkingTime] = useState([]);
@@ -18,7 +18,6 @@ function WorkingTimeGraph() {
 
         return () => clearInterval(intervalId);
     }, []);
-
 
     useEffect(() => {
         const calculateWorkingTime = () => {
@@ -68,7 +67,7 @@ function WorkingTimeGraph() {
                         }
 
                         // Add break duration to current hour's break time
-                        currentBreakTime[hour] += breakDuration;
+                        currentBreakTime[hour] += Math.floor(breakDuration);
                     }
                 });
             }
@@ -107,9 +106,6 @@ function WorkingTimeGraph() {
 
         calculateWorkingTime();
     }, [attendance]);
-
-
-
 
     useEffect(() => {
         const ctx = document.getElementById('workingTimeGraph');

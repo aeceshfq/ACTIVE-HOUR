@@ -4,6 +4,12 @@ const { Schema } = require("mongoose");
 class organization_table {
     model = "organization";
     fields = {
+        userId: {
+			type: Schema.Types.ObjectId,
+			ref: 'users',
+			immutable: true,
+			required: [true, 'userId is required']
+        },
         name: {
             type: String,
             unique: true,
