@@ -13,14 +13,16 @@ export default function Profile(){
         <>
             <LegacyCard title="Profile">
                 <LegacyCard.Section>
-                    <Stack alignItems="center" direction="column" spacing={1}>
-                        <AccountCircleIcon fontSize="large" sx={{width: 84, height: 84}} />
-                        <Typography variant="h6">
-                            {user.fullName}
-                        </Typography>
-                        <Typography variant="caption">
-                            {String(user.role).replace(/\_/g, ' ')}
-                        </Typography>
+                    <Stack alignItems="center" direction="column" spacing={2}>
+                        <Stack alignItems="center" direction="column" spacing={0}>
+                            <AccountCircleIcon fontSize="large" sx={{width: 84, height: 84}} />
+                            <Typography variant="h6">
+                                {user.fullName}
+                            </Typography>
+                            <Typography variant="caption">
+                                {String(user.designation).replace(/\_/g, ' ')}
+                            </Typography>
+                        </Stack>
                         <Button
                             size="small"
                             variant="contained"

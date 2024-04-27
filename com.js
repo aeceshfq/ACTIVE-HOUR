@@ -103,22 +103,13 @@ const ${modelName} = require("../models/${modelName}");
 
 class ${controllerName} extends Controller {
     async get(req, res) {
-        if (req.query.id) {
-            let data = await ${modelName}.findOne({ id: req.query.id });
-            return res.send({
-                "status": "success",
-                "code": "1",
-                "data": data
-            });
-        }
-        else{
-            let data = await ${modelName}.lookup(req);
-            return res.send({
-                "status": "success",
-                "code": "1",
-                "data": data
-            });
-        }
+        let query = this.query(req);
+        let data = await ${modelName}.findOne(query);
+        return res.send({
+            "status": "success",
+            "code": "1",
+            "data": data
+        });
     }
 
     async update(req, res) {
@@ -204,10 +195,17 @@ const { Schema } = require("mongoose");
 class ${tableName}_table {
     model = "${tableName}";
     fields = {
+        userId: {
+			type: Schema.Types.ObjectId,
+			ref: 'users',
+			immutable: true,
+			required: [true, 'userId is required']
+        },
         name: {
             type: String,
-            default: null
-        }
+            unique: true,
+            required: true,
+        },
     };
 }
 

@@ -66,6 +66,16 @@ class users_table {
             default: _enum.user.role[1],
             description: `must be ${_enum.user.role.toString()}`
         },
+        designation: {
+            type: String,
+            enum: _enum.employeeDesignations,
+            default: _enum.employeeDesignations[0],
+            description: `must be ${_enum.employeeDesignations.toString()}`
+        },
+        introStatus: {
+            type: String,
+            default: null
+        },
         status: {
             type: String,
             enum: _enum.user.status,

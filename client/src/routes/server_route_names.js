@@ -18,6 +18,7 @@ const server_route_names = {
     "attendance.signin": "/api/attendance/signin",
     "attendance.signout": "/api/attendance/signout",
     "attendance.status": "/api/attendance/status",
+    "organization": "/api/organization"
 };
 
 export default server_route_names;

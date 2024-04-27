@@ -13,8 +13,6 @@ const route_names = {
     "management.staff": "/management/staff",
     "management.staff.add": "/management/staff/add",
     "management.staff.edit": "/management/staff/edit/:id",
-    "collections": "/collections",
-    "products": "/products"
 };
 
 export default route_names;

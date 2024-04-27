@@ -26,6 +26,7 @@ export default function EditMyStaff () {
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
     const [status, setStatus] = useState("");
+    const [designation,setDesignation] = useState("");
     
     const navigate = useNavigate();
 
@@ -36,24 +37,28 @@ export default function EditMyStaff () {
             setEmail(userAccount.email);
             setPermissions(userAccount.privileges.map(x => x.scope));
             setRole(userAccount.role);
+            setDesignation(userAccount.designation);
             setStatus(userAccount.status);
         }
     }, [userAccount])
 
     const updateStaff = async () => {
         // /staff/add
+        let data = {
+            firstName: firstName,
+            lastName: lastName,
+            email: userAccount?.email,
+            permissions: permissions,
+            userId: userAccount._id
+        };
+        if (role) data["role"] = role;
+        if (designation) data["designation"] = designation;
+        if (status) data["status"] = status;
+
         await sendRequest({
             url: server_route_names["users.update"],
             type: "put",
-            data: {
-                firstName: firstName,
-                lastName: lastName,
-                email: userAccount?.email,
-                permissions: permissions,
-                userId: userAccount._id,
-                role: role,
-                status: status
-            }
+            data: data
         });
     }
 
@@ -144,7 +149,7 @@ export default function EditMyStaff () {
                             >
                                 {
                                     _enum.user.status.map(x => (
-                                        <MenuItem key={x} value={x}>{x}</MenuItem>
+                                        <MenuItem key={x} value={x}>{String(x).replace(/\_/g, ' ')}</MenuItem>
                                     ))
                                 }
                             </Select>
@@ -164,7 +169,29 @@ export default function EditMyStaff () {
                             >
                                 {
                                     _enum.user.role.map(x => (
-                                        <MenuItem key={x} value={x}>{x}</MenuItem>
+                                        <MenuItem key={x} value={x}>
+                                            {String(x).replace(/\_/g, ' ')}
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </FormControl>
+                        <FormControl size="small">
+                            <InputLabel id="userAccount-desig-selection">Designation</InputLabel>
+                            <Select
+                                labelId="userAccount-desig-selection"
+                                id="userAccount-role-select"
+                                value={designation}
+                                label="Designation"
+                                onChange={(e) => {
+                                    setDesignation(e.target.value)
+                                }}
+                            >
+                                {
+                                    _enum.employeeDesignations.map(x => (
+                                        <MenuItem key={x} value={x}>
+                                            {String(x).replace(/\_/g, ' ')}
+                                        </MenuItem>
                                     ))
                                 }
                             </Select>

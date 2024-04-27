@@ -82,19 +82,16 @@ class UserModel extends Model {
 				},
 			},
 			{
-				$project: {
-					"_id": 1,
-					"firstName": 1,
-					"lastName": 1,
-					"email": 1,
-					"id": 1,
-					"role": 1,
-					"status": 1,
+				$addFields: {
 					"userId": "$_id",
 					"fullName": {
 						"$concat": ['$firstName', ' ', '$lastName'], // Concatenate firstName and lastName with a space in between
-					},
-					"privileges": 1,
+					}
+				},
+			},
+			{
+				$project: {
+					"password": 0,
 				},
 			}
 		]);

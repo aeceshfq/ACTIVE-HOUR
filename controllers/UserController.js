@@ -7,6 +7,7 @@ const UserPrivilegeModel = require("../models/UserPrivilegeModel");
 const UserModel = require("../models/UserModel");
 const jwt = require('jsonwebtoken');
 const config = require("./auth/config");
+const _enum = require("../enum");
 
 class UserController {
 
@@ -326,12 +327,7 @@ class UserController {
         await UserModel.updateOneByQuery({
             _id: userId,
             email: email
-        }, {
-            firstName,
-            lastName,
-            role,
-            status
-        });
+        }, req.body);
 
         let data_permissions = [];
         if (permissions && typeof permissions === "object") {
@@ -355,15 +351,6 @@ class UserController {
         });
 
         await UserPrivilegeModel.bulkUpdateOrInsert(data_permissions);
-
-        if (data_permissions.length === 0) {
-            await UserModel.updateOneByQuery({
-                _id: userId,
-                email: email
-            }, {
-                role: "MEMBER"
-            });
-        }
         
         return res.send({
             "status": "success",
