@@ -99,7 +99,7 @@ function WorkingTimeGraph({ refresh }) {
                             breakDuration = (breakEndTime - startOfHour) / (60*1000);
                         } else {
                             // Full hour break
-                            breakDuration = 3600000 / (60*1000); // 1 hour in milliseconds
+                            breakDuration = 60; // 60 minutes in an hour
                         }
 
                         // Add break duration to current hour's break time

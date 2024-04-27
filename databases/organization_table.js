@@ -1,6 +1,7 @@
 
 const { Schema } = require("mongoose");
 const StringHelper = require("../helpers/StringHelper");
+const _enum = require("../enum");
 class organization_table {
     model = "organization";
     fields = {
@@ -26,17 +27,18 @@ class organization_table {
             type: String,
             default: null
         },
+        legalDocument: {
+            type: Object,
+            default: null
+        },
         businessAddress: {
             type: Object,
             default: null
         },
-        isVerified: {
-            type: Boolean,
-            default: false
-        },
-        image: {
-            type: Object,
-            default: null
+        employeeRange: {
+            type: String,
+            enum: _enum.employeeRange,
+            default: _enum.employeeRange[0],
         }
     };
 }

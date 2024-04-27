@@ -82,7 +82,7 @@ export default function Attendance(){
             {alertProps}
             <LegacyCard title="Attendance">
                 <LegacyCard.Section>
-                    <Stack direction="column" spacing={2}>
+                    <Stack direction="column" spacing={2} alignItems="center">
                         {
                             !attendance?.clockInTime && <Alert variant="outlined" severity="warning">You haven't checked in for attendance today!</Alert>
                         }
@@ -99,7 +99,7 @@ export default function Attendance(){
                             </div>
                         }
                         <CalculateWorkingTime attendance={attendance}/>
-                        <Stack direction="row" spacing={1}>
+                        <Stack direction="row" spacing={1} alignItems="center">
                             {
                                 (attendance && attendance?.workingState === "WORKING" && !attendance?.clockOutTime) && <Button
                                     variant="contained"

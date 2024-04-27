@@ -90,7 +90,7 @@ export default function EditMyStaff () {
 
     return (
         <Page
-            title="Staff member"
+            title={userAccount?.fullName??"Staff member"}
             backAction={() => {
                 navigate(route_names["management.staff"])
             }}

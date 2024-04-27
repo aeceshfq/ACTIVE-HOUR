@@ -52,5 +52,6 @@ module.exports = {
 		"CUSTOMER_SERVICE_REPRESENTATIVE", // Customer Service Representative
 		"SUPPORT_SPECIALIST", // Support Specialist
 		"COMMUNICATIONS_SPECIALIST" // Communications Specialist
-	]
+	],
+	employeeRange: ["0-10", "11-50", "51-500", "501+"]
 };

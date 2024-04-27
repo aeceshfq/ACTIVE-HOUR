@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import server_route_names from "../../routes/server_route_names";
 import { useFetch } from "../../providers/AppProvider";
-import { Chip, Paper, TableContainer, Typography } from "@mui/material";
+import { Chip, Paper, Stack, TableContainer, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -94,12 +94,23 @@ export default function MyStaff(){
 const columns = [
     {   field: 'fullName', 
         headerName: 'Name',
-        width: 180,
-        hideable: false
+        width: 240,
+        hideable: false,
+        renderCell: params => {
+            return <Stack direction="column" spacing={0}>
+                <Typography variant="subtitle2" sx={{textTransform: "uppercase"}}>{params.value}</Typography>
+                <Typography variant="caption" sx={{textTransform: "capitalize"}}>{String(params.row?.designation).replace(/\_/g, " ").toLowerCase()}</Typography>
+            </Stack>
+        }
     },
     {   field: 'email', 
         headerName: 'Email address',
-        width: 240,
+        width: 200,
+        hideable: false
+    },
+    {   field: 'phone', 
+        headerName: 'Phone Number',
+        width: 160,
         hideable: false
     },
     {   field: 'status', 
@@ -118,12 +129,19 @@ const columns = [
         width: 120,
         valueGetter: (params) =>  params.value?moment(params.row.lastLogin).fromNow():null
     },
+    {   field: 'hireDate', 
+        headerName: 'Hire date',
+        filterable: false,
+        sortable: false,
+        width: 120,
+        valueGetter: (params) =>  params.row.hireDate?moment(params.row.hireDate).format("MM/DD/YYYY"):null
+    },
     {   field: 'createdAt', 
         headerName: 'Created',
         filterable: false,
         sortable: false,
         width: 180,
-        valueGetter: (params) =>  `${ moment(params.row.createdAt).calendar() }`
+        valueGetter: (params) =>  `${ moment(params.value).calendar() }`
     },
 ];
 
@@ -131,12 +149,8 @@ const DataGridRow = (data, user) => {
     let finalData = [];
 
     if (data?.items?.length > 0) {
-        finalData = data?.items.filter(x => x._id === user?._id).map(x => {
-            x.fullName = `Me`;
-            return x;
-        });
-        finalData = finalData.concat(data?.items.filter(x => x._id !== user?._id));
-        return finalData;
+        finalData = data?.items.filter(x => x._id !== user?._id);
+        return data?.items;
     }
     else{
         return [];

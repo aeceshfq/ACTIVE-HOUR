@@ -98,6 +98,10 @@ class users_table {
             type: Date,
             default: null
         },
+        dateOfBirth: {
+            type: Date,
+            default: null
+        },
         departmentId : {
             type: Schema.Types.ObjectId,
             ref: 'department',
