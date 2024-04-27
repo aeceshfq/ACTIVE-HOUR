@@ -46,6 +46,7 @@ class OrganizationController extends Controller {
                 
             }
         }
+        console.log("req.body.data", req.body.data);
         let data = await OrganizationModel.save(req.body.data);
         if (data?._id) {
             return res.send({

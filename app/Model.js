@@ -229,8 +229,8 @@ class Model {
         const data = await this.db.find(query).catch(e => e);
         return data;
     }
-    async get(id) {
-        const data = await this.db.find({ _id: id }).catch(e => e);
+    async get(_id) {
+        const data = await this.db.find({ _id: _id }).catch(e => e);
         return data;
     }
     async findByQuery(query, fields) {
@@ -306,8 +306,8 @@ class Model {
         const created = await this.db.insertMany(data).catch(e => e);
         return created;
     }
-    async updateOne(id, data) {
-        const updated = await this.db.updateOne({ _id: id }, data).catch(e => e);
+    async updateOne(_id, data) {
+        const updated = await this.db.updateOne({ _id: _id }, data).catch(e => e);
         return updated;
     }
     async updateOneByQuery(query, data) {
@@ -370,8 +370,8 @@ class Model {
         const created = await this.db.updateMany(query, data).catch(e => e);
         return created;
     }
-    async deleteOne(id) {
-        const data = await this.db.deleteOne({ _id: id }).catch(e => e);
+    async deleteOne(_id) {
+        const data = await this.db.deleteOne({ _id: _id }).catch(e => e);
         return data;
     }
     async deleteByQuery(query) {

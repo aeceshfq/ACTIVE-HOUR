@@ -51,6 +51,14 @@ function containsOnlyAlpha(string) {
     return alphaRegex.test(string);
 }
 
+function containsAlphaNumeric(string) {
+    // Regular expression to match alphanumeric characters and spaces
+    const alphaNumericRegex = /^[a-zA-Z0-9\s]+$/;
+
+    // Test the input string against the regular expression
+    return alphaNumericRegex.test(string);
+}
+
 function containsOnlyNumeric(string) {
     // Regular expression to match only numeric characters
     const numericRegex = /^[0-9]+$/;
@@ -86,6 +94,13 @@ function isStrongPassword(password) {
     }
 
     // All criteria passed; it's a strong password
+    return true;
+}
+
+function StringValidator(name) {
+    if (!name || name.trim() === "") return false;
+    if (!containsAlphaNumeric(name)) return false;
+    if (name.length < 1) return false;
     return true;
 }
 
@@ -140,7 +155,7 @@ function urlString(inputString) {
 }
 
 const StringHelper = {
-    randNumber, randString, randAlpha, HasAlphanumericMix, EmailValidator, containsOnlyAlpha, containsOnlyNumeric, isStrongPassword, NameValidator, isValidPhoneNumber, StringToNumber, ExtractSectionFromHTML, urlString, ParseNumber, moneyFormat
+    randNumber, randString, randAlpha, HasAlphanumericMix, EmailValidator, containsOnlyAlpha, containsOnlyNumeric, isStrongPassword, NameValidator, isValidPhoneNumber, StringToNumber, ExtractSectionFromHTML, urlString, ParseNumber, moneyFormat, StringValidator
 }
 
 module.exports = StringHelper;

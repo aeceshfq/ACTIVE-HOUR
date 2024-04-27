@@ -16,8 +16,8 @@ api.post('/attendance/signout', Attendance.clockOutTime);
 api.post('/attendance/status', Attendance.updateStatus);
 
 api.route("/organization")
-.get(Organization.get)
-.post(Organization.create)
-.put(Organization.update);
+.get((req, res) => Organization.get(req, res))
+.post((req, res) => Organization.create(req, res))
+.put((req, res) => Organization.update(req, res));
 
 module.exports = api;

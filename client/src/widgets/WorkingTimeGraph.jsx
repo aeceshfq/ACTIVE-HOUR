@@ -34,11 +34,9 @@ function WorkingTimeGraph({ refresh }) {
                 attendance.breaks.forEach(breakItem => {
                     const breakStartTime = new Date(breakItem.clockInTime);
                     const breakEndTime = new Date(breakItem.clockOutTime);
-                    
                     // Get the hour of break start and end time
                     const breakStartHour = breakStartTime.getHours();
                     const breakEndHour = breakEndTime.getHours();
-
                     // Calculate break time for each hour
                     for (let hour = breakStartHour; hour <= breakEndHour; hour++) {
                         let breakDuration = 0;
@@ -70,10 +68,48 @@ function WorkingTimeGraph({ refresh }) {
                         currentBreakTime[hour] += Math.floor(breakDuration);
                     }
                 });
+                // if there is break time, show graph also
+                if (attendance?.breakTime && attendance?.workingState === "ON_BREAK") {
+                    const breakStartTime = new Date(attendance?.breakTime);
+                    const breakEndTime = new Date();
+                    // Get the hour of break start and end time
+                    const breakStartHour = breakStartTime.getHours();
+                    const breakEndHour = breakEndTime.getHours();
+                    // Calculate break time for each hour
+                    for (let hour = breakStartHour; hour <= breakEndHour; hour++) {
+                        let breakDuration = 0;
+
+                        // Check if the break spans multiple hours
+                        if (breakStartHour === hour && breakEndHour === hour) {
+                            // Break within the same hour
+                            breakDuration = (breakEndTime - breakStartTime) / (60*1000);
+                        } else if (breakStartHour === hour) {
+                            // Break starts in this hour
+                            const endOfHour = new Date(breakStartTime);
+                            endOfHour.setMinutes(59);
+                            endOfHour.setSeconds(59);
+                            endOfHour.setMilliseconds(999);
+                            breakDuration = (endOfHour - breakStartTime) / (60*1000);
+                        } else if (breakEndHour === hour) {
+                            // Break ends in this hour
+                            const startOfHour = new Date(breakEndTime);
+                            startOfHour.setMinutes(0);
+                            startOfHour.setSeconds(0);
+                            startOfHour.setMilliseconds(0);
+                            breakDuration = (breakEndTime - startOfHour) / (60*1000);
+                        } else {
+                            // Full hour break
+                            breakDuration = 3600000 / (60*1000); // 1 hour in milliseconds
+                        }
+
+                        // Add break duration to current hour's break time
+                        currentBreakTime[hour] += Math.floor(breakDuration);
+                    }
+                }
             }
 
             // Calculate working time until now
-            const now = attendance.clockOutTime? new Date(attendance.clockOutTime): new Date();
+            const now = attendance.clockOutTime? new Date(attendance.clockOutTime): (attendance?.workingState === "ON_BREAK" && attendance.breakTime)? new Date(attendance.breakTime): new Date();
             const startHour = clockInTime.getHours();
             const endHour = now.getHours();
             for (let hour = startHour; hour <= endHour; hour++) {

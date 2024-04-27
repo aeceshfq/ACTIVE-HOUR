@@ -1,6 +1,6 @@
 
 const { Schema } = require("mongoose");
-
+const StringHelper = require("../helpers/StringHelper");
 class organization_table {
     model = "organization";
     fields = {
@@ -14,11 +14,17 @@ class organization_table {
             type: String,
             unique: true,
             required: true,
+            validate: {
+                validator: StringHelper.StringValidator,
+                message: "Name is required"
+            },
+            set: function (name) {
+                return name.trim(); // Trims whitespace before saving
+            },
         },
         legalName: {
             type: String,
-            unique: true,
-            required: true,
+            default: null
         },
         businessAddress: {
             type: Object,

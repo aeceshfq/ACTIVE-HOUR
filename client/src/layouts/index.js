@@ -121,6 +121,7 @@ export default function ThemeColorModeProvider() {
             },
             MuiButton: {
                 defaultProps: {
+                    variant: "contained",
                     size: "medium",
                     color: "primary"
                 }
