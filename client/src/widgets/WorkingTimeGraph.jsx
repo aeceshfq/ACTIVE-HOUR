@@ -42,8 +42,33 @@ function WorkingTimeGraph() {
 
                     // Calculate break time for each hour
                     for (let hour = breakStartHour; hour <= breakEndHour; hour++) {
-                        const breakDuration = (breakEndTime - breakStartTime) / (1000 * 60); // Convert milliseconds to minutes
-                        currentBreakTime[hour] += Math.floor(breakDuration);
+                        let breakDuration = 0;
+
+                        // Check if the break spans multiple hours
+                        if (breakStartHour === hour && breakEndHour === hour) {
+                            // Break within the same hour
+                            breakDuration = (breakEndTime - breakStartTime) / (60*1000);
+                        } else if (breakStartHour === hour) {
+                            // Break starts in this hour
+                            const endOfHour = new Date(breakStartTime);
+                            endOfHour.setMinutes(59);
+                            endOfHour.setSeconds(59);
+                            endOfHour.setMilliseconds(999);
+                            breakDuration = (endOfHour - breakStartTime) / (60*1000);
+                        } else if (breakEndHour === hour) {
+                            // Break ends in this hour
+                            const startOfHour = new Date(breakEndTime);
+                            startOfHour.setMinutes(0);
+                            startOfHour.setSeconds(0);
+                            startOfHour.setMilliseconds(0);
+                            breakDuration = (breakEndTime - startOfHour) / (60*1000);
+                        } else {
+                            // Full hour break
+                            breakDuration = 3600000 / (60*1000); // 1 hour in milliseconds
+                        }
+
+                        // Add break duration to current hour's break time
+                        currentBreakTime[hour] += breakDuration;
                     }
                 });
             }
@@ -72,7 +97,6 @@ function WorkingTimeGraph() {
                     // Full hour working time
                     workingTime = 60; // 60 minutes in an hour
                 }
-
                 // Exclude break time from working time
                 currentWorkingTime[hour] = Math.floor(Math.max(0, workingTime - currentBreakTime[hour]));
             }
