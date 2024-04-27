@@ -19,12 +19,6 @@ export default function Home(){
     return(
         <LegacyPage>
             <Layout>
-                {
-                    user?.role === "OWNER" && 
-                    <Layout.Section>
-                        <Organization />
-                    </Layout.Section>
-                }
                 <Layout.Section oneThird>
                     <Stack direction="column" spacing={2}>
                         <Profile />
