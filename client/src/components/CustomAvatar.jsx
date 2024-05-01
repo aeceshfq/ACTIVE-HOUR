@@ -23,13 +23,15 @@ function stringToColor(string) {
   return color;
 }
 
-function stringAvatar(name, theme, renderName, style) {
+function stringAvatar(name, theme, renderName, style, digits) {
     var val = `${name[0]}`;
-    // try {
-    //   val = `${name?.split(' ')?.[0]?.[0]}${name?.split(' ')?.[1]?.[0]??''}`;
-    // } catch (error) {
-        
-    // }
+    if (digits) {
+      try {
+        val = `${name?.split(' ')?.[0]?.[0]}${name?.split(' ')?.[1]?.[0]??''}`;
+      } catch (error) {
+          
+      }  
+    }
     try {
       val = val.toUpperCase();
     } catch (error) {
@@ -58,9 +60,9 @@ export default function CustomAvatar({name, icon}) {
   );
 }
 
-export function NameAvatar({name, sx}) {
+export function NameAvatar({name, sx, digits}) {
   const theme = useTheme();
   return (
-    <Avatar {...stringAvatar(name, theme, true, sx)}></Avatar>
+    <Avatar {...stringAvatar(name, theme, true, sx, digits)}></Avatar>
   );
 }

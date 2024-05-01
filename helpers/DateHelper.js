@@ -30,7 +30,6 @@ const DiffMinutes = (startDate, endDate = new Date()) => {
     return minutesDifference;
 }
 
-
 const DiffSeconds = (startDate, endDate = new Date()) => {
     // Calculate the time difference in milliseconds
     const timeDifference = endDate - startDate;
@@ -73,6 +72,20 @@ function UnixTimestamp(duration = 15, durationType = "MIN") {
   const timeNow = Math.floor(futureTimestamp / 1000); // Convert to seconds
 
   return timeNow;
+}
+
+function FormatDate(date){
+  const moment = require("moment");
+  let d_format = "YYYY-MM-DD";
+  if (date) {
+    try {
+      let converted = moment(date?date:new Date()).format(d_format);
+      return converted !== "Invalid date"?converted:null;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  return null;
 }
 
 function Timestamps(duration = 15, durationType = "MIN") {
@@ -150,7 +163,7 @@ function generateTimestamp() {
 
 
 const DateHelper = {
-    nextDate, minDiff, isExpired, NextDueDate, DiffMinutes, UnixTimestamp, previousDate, today, ISOStringDate, DiffSeconds, timestampNow, generateTimestamp, Timestamps
+    nextDate, minDiff, isExpired, NextDueDate, DiffMinutes, UnixTimestamp, previousDate, today, ISOStringDate, DiffSeconds, timestampNow, generateTimestamp, Timestamps, FormatDate
 }
 
 

@@ -75,13 +75,13 @@ const AppTopBar = (props) => {
         disableTouchRipple
       >
         <ListItemIcon>
-          <NameAvatar name={user?.fullName}/>
+          <NameAvatar digits={true} name={user?.fullName} sx={{width: 68, height: 68, fontSize: "2rem"}}/>
         </ListItemIcon>
         <Stack ml={2} direction="column" spacing={0}>
-          <Typography>
+          <Typography variant="subtitle1">
             {user?.fullName}
           </Typography>
-          <Typography variant="caption">
+          <Typography variant="caption" color="text.secondary">
             {user?.email}
           </Typography>
         </Stack>

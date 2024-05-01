@@ -99,7 +99,10 @@ const columns = [
         renderCell: params => {
             return <Stack direction="column" spacing={0}>
                 <Typography variant="subtitle2" sx={{textTransform: "uppercase"}}>{params.value}</Typography>
-                <Typography variant="caption" sx={{textTransform: "capitalize"}}>{String(params.row?.designation).replace(/\_/g, " ").toLowerCase()}</Typography>
+                {
+                    params.row?.designation &&
+                    <Typography variant="caption" sx={{textTransform: "capitalize"}}>{String(params.row?.designation).replace(/\_/g, " ").toLowerCase()}</Typography>
+                }
             </Stack>
         }
     },

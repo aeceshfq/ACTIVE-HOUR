@@ -15,6 +15,7 @@ module.exports = {
 		workingState: ["WORKING", "ON_BREAK", "IDLE", "TRAINING", "MEETING", "SIGNED_OUT"]
 	},
 	employeeDesignations: [
+		null,
 		"CEO", // Chief Executive Officer
 		"CFO", // Chief Financial Officer
 		"COO", // Chief Operating Officer

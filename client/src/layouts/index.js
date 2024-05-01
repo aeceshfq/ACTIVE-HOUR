@@ -33,9 +33,9 @@ export default function ThemeColorModeProvider() {
         breakpoints: {
             values: {
                 xs: 320,
-                sm: 600,
-                md: 900,
-                lg: 1200,
+                sm: 580,
+                md: 800,
+                lg: 1000,
                 xl: 1536,
             },
         },

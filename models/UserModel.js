@@ -45,6 +45,15 @@ class UserModel extends Model {
 		return user;
 	}
 
+	async findOneWithPopulate(query, populate, populate1) {
+		if (populate1) {
+			var user = await this.db.findOne(query).populate(populate).populate(populate1);
+			return user;
+		}
+		var user = await this.db.findOne(query).populate(populate);
+		return user;
+	}
+
 	async findWithUserPrivileges(_id) {
 		let __id = mongoose.Types.ObjectId(String(_id));
 		var user = await this.db.aggregate([

@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { useAuth } from "../providers/AuthProvider";
 import LegacyPage from "../subcomponents/LegacyPage";
 import Attendance from "../widgets/Attendance";
-import WorkingTimeGraph from "../widgets/WorkingTimeGraph";
 import Profile from "../widgets/Profile";
 import Organization from "../widgets/Organization";
+import AttendanceGraph from "../widgets/AttendanceGraph";
 
 export default function Home(){
     const { user } = useAuth();
@@ -26,7 +26,7 @@ export default function Home(){
                     </Stack>
                 </Layout.Section>
                 <Layout.Section twoThird>
-                    <WorkingTimeGraph />
+                    <AttendanceGraph />
                 </Layout.Section>
             </Layout>
         </LegacyPage>

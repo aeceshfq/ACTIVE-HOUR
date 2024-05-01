@@ -11,6 +11,7 @@ const scopes = require("../../privileges/scopes");
 const AccountActivationEmail = require("../../email/users/AccountActivationEmail");
 const UserPrivilegeModel = require("../../models/UserPrivilegeModel");
 const { DecodeHex, EncodeBase64URL, EncodeHex, DecodeBase64URL } = require("../../helpers/AuthHelper");
+const AccountInvitationEmail = require("../../email/users/AccountInvitationEmail");
 
 const Login = async (email, password, req) => {
     if (!email || !EmailValidator(email)) {
@@ -203,6 +204,104 @@ const Register = async (params, req) => {
     }
 }
 
+const InviteUser = async (req) => {
+    const userId = req?.user?._id;
+    const {
+        firstName,
+        lastName,
+        email,
+        designation,
+        permissions
+    } = req.body;
+
+    if (!firstName) {
+        return {
+            "message": "FirstName is required",
+            "status": "failed",
+            "code": "2"
+        };
+    }
+
+    if (!email || !EmailValidator(email)) {
+        return {
+            "message": "Email address is required",
+            "status": "failed",
+            "code": "2"
+        };
+    }
+
+    const count = await UserModel.count({email: email});
+
+    if (Number(count) > 0) {
+        return ({
+            "message": "An account already exists for this email address",
+            "status": "failed",
+            "code": "2"
+        });
+    }
+
+    const invitedBy = await UserModel.findOneWithPopulate({ _id: userId }, "organizationId", "departmentId");
+
+    var userSaved = await UserModel.save({
+        firstName,
+        lastName,
+        email,
+        designation,
+        role: "EMPLOYEE",
+        status: "INVITED",
+        invitedBy: req.user._id,
+        departmentId: invitedBy?.organizationId,
+        organizationId: invitedBy?.departmentId,
+        hireDate: new Date(),
+    });
+
+    console.log(userSaved);
+
+    if (userSaved?._id) {
+        let data_permissions = [];
+        if (permissions && typeof permissions === "object") {
+            for (let index = 0; index < permissions.length; index++) {
+                const scope = permissions[index];
+                data_permissions.push({
+                    find: {
+                        scope: scope,
+                        userId: userSaved?._id
+                    },
+                    update: {
+                        scope: scope,
+                        status: "GRANTED"
+                    }
+                })
+            }
+        }
+        await UserPrivilegeModel.bulkUpdateOrInsert(data_permissions);
+
+        var tokenRound1 = jwt.sign({
+            exp: DateHelper.UnixTimestamp(config.stayLoggedInDuration.value, config.stayLoggedInDuration.type),
+            data: {
+                id: userSaved?._id,
+                status: userSaved.status
+            }
+        }, process.env.JWT_SECRET_TOKEN);
+        
+        await AccountInvitationEmail(email, req.user, userSaved, tokenRound1);
+
+        return {
+            "status": "success",
+            "code": "2",
+            "message": `Account invitation has been sent to ${email}`
+        };
+    }
+    else{
+        return {
+            status: "failed",
+            code: "2",
+            message: "Server error",
+            error: userSaved
+        };
+    }
+}
+
 const GenerateSessionToken = async (user, req) => {
     const userSessionId = req.cookies.sessionId;
     const userSessionToken = req.cookies.sessionToken;
@@ -351,7 +450,7 @@ const Logout = async (req) => {
 }
 
 const Account = {
-    Login, Register, GenerateSessionToken, VerifySession, Logout
+    Login, Register, GenerateSessionToken, VerifySession, Logout, InviteUser
 };
 
 module.exports = Account;

@@ -4,6 +4,7 @@ import { useAuth } from "../providers/AuthProvider";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from "react-router-dom";
 import route_names from "../routes/route_names";
+import { NameAvatar } from "../components/CustomAvatar";
 
 export default function Profile(){
     const { user, logout } = useAuth();
@@ -15,13 +16,17 @@ export default function Profile(){
                 <LegacyCard.Section>
                     <Stack alignItems="center" direction="column" spacing={2}>
                         <Stack alignItems="center" direction="column" spacing={0}>
-                            <AccountCircleIcon fontSize="large" sx={{width: 84, height: 84}} />
+                            {/* <AccountCircleIcon fontSize="large" sx={{width: 84, height: 84}} /> */}
+                            <NameAvatar digits={true} name={user.fullName} sx={{width: 112, height: 112, fontSize: "3rem"}}/>
                             <Typography variant="h6">
                                 {user.fullName}
                             </Typography>
-                            <Typography variant="caption">
-                                {String(user.designation).replace(/\_/g, ' ')}
-                            </Typography>
+                            {
+                                user.designation &&
+                                <Typography variant="caption" color="text.secondary">
+                                    {String(user.designation).replace(/\_/g, ' ')}
+                                </Typography>
+                            }
                         </Stack>
                         <Button
                             size="small"

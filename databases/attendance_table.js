@@ -14,7 +14,7 @@ class attendance_table {
         attendanceDate: {
             type: Date,
             required: true,
-            immutable: true,
+            immutable: true
         },
         clockInTime: {
             type: Date,
