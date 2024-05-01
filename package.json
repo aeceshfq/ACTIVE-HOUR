@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@sendgrid/mail": "^8.1.1",
+    "archiver": "^7.0.1",
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.1",
@@ -23,6 +24,9 @@
   },
   "scripts": {
     "start": "nodemon start ./server.js",
-    "com": "node com.js"
+    "com": "node com.js",
+    "zip": "node ./zip_folders.js",
+    "zip_all": "node ./zip_folders.js && cd client\\build && powershell Compress-Archive -Path * -DestinationPath ..\\..\\zip_files\\PUBLIC-BUILD-$(Get-Date -Format 'yyyy-MM-dd-HHmmss').zip -Force && cd ..;",
+    "zip_client": "cd client\\build && powershell Compress-Archive -Path * -DestinationPath ..\\..\\zip_files\\PUBLIC-BUILD-$(Get-Date -Format 'yyyy-MM-dd-HHmmss').zip -Force && cd ..;"
   }
 }
