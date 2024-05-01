@@ -1,4 +1,4 @@
-const verifyRole = (role) => {
+const verifyRole = (role, message) => {
     return async (req, res, next) => {
         var user = req.user;
         if (user?.role === role) {
@@ -6,7 +6,7 @@ const verifyRole = (role) => {
         }
         else{
             return res.status(200).send({
-                "message": "Access denied: insufficient permissions for the requested action.",
+                "message": message??"Access denied: insufficient permissions for the requested action.",
                 "status": "failed",
                 "code": "4"
             });

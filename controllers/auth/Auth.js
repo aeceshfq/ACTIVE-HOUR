@@ -255,8 +255,6 @@ const InviteUser = async (req) => {
         hireDate: new Date(),
     });
 
-    console.log(userSaved);
-
     if (userSaved?._id) {
         let data_permissions = [];
         if (permissions && typeof permissions === "object") {

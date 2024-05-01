@@ -54,6 +54,10 @@ const CreateOrganization = ({ }) => {
         return true;
     }
 
+    if (user?.role !== "OWNER") {
+        return null;
+    }
+
     return (
         <>
             {
@@ -62,6 +66,15 @@ const CreateOrganization = ({ }) => {
                         open={true}
                         type="success"
                         message="Created successfuly"
+                    />
+                )
+            }
+            {
+                errorOrganization && (
+                    <Toast
+                        open={true}
+                        type="error"
+                        message={errorOrganization}
                     />
                 )
             }
@@ -185,9 +198,6 @@ const CreateOrganization = ({ }) => {
                                     }}
                                 />
                             </Stack>
-                            {
-                                errorOrganization && <Alert severity="error">{errorOrganization}</Alert>
-                            }
                         </Stack>
                     </Layout.Section>
                 </Layout>
