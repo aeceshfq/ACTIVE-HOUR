@@ -35,7 +35,7 @@ export default function Attendance(){
         logout();
     }
 
-    const workignStatus = async (workingState) => {
+    const changeWorkingState = async (workingState) => {
         await updateAttendance({
             url: `${server_route_names["attendance.status"]}`,
             type: "post",
@@ -105,7 +105,7 @@ export default function Attendance(){
                                     variant="contained"
                                     disabled={attendanceLoading}
                                     onClick={() => {
-                                        workignStatus("ON_BREAK");
+                                        changeWorkingState("ON_BREAK");
                                     }}
                                 >
                                     Take a break
@@ -116,7 +116,7 @@ export default function Attendance(){
                                     variant="contained"
                                     disabled={attendanceLoading}
                                     onClick={() => {
-                                        workignStatus("WORKING")
+                                        changeWorkingState("WORKING")
                                     }}
                                 >
                                     Break sign out
@@ -159,37 +159,58 @@ export default function Attendance(){
 }
 
 function CalculateWorkingTime({ attendance }) {
-  const [clockInTime, setClockInTime] = useState(attendance?.clockInTime?new Date(attendance?.clockInTime):null);
-  const [workingTime, setWorkingTime] = useState(0);
-  const [breakTime, setBreakTime] = useState(0);
+    const [clockInTime, setClockInTime] = useState(attendance?.clockInTime?new Date(attendance?.clockInTime):null);
+    const [workingTime, setWorkingTime] = useState(0);
+    const [breakTime, setBreakTime] = useState(0);
 
-  useEffect(() => {
-    if (attendance?.clockInTime) {
-        setClockInTime(new Date(attendance?.clockInTime));
-    }
-  }, [attendance]);
+    useEffect(() => {
+        if (attendance?.clockInTime) {
+            setClockInTime(new Date(attendance?.clockInTime));
+        }
+    }, [attendance]);
 
-  useEffect(() => {
-    let totalBreakTime = 0;
-    if (attendance?.breaks) {
-      attendance.breaks.forEach(breakItem => {
-        const breakStartTime = new Date(breakItem.clockInTime);
-        const breakEndTime = new Date(breakItem.clockOutTime);
-        totalBreakTime += breakEndTime - breakStartTime;
-      });
-      setBreakTime(totalBreakTime);
-    }
-  }, [attendance]);
+    useEffect(() => {
+        let totalBreakTime = 0;
+        if (attendance?.breaks) {
+            attendance.breaks.forEach(breakItem => {
+            const breakStartTime = new Date(breakItem.clockInTime);
+            const breakEndTime = new Date(breakItem.clockOutTime);
+            totalBreakTime += breakEndTime - breakStartTime;
+            });
+            setBreakTime(totalBreakTime);
+        }
+    }, [attendance]);
+
+    useEffect(() => {
+        const bIntervalId = setInterval(() => {
+            if (attendance?.workingState === "ON_BREAK") {
+                let totalBreakTime = 0;
+                if (attendance?.breakTime && attendance?.workingState === "ON_BREAK") {
+                    const breakStartTime = new Date(attendance?.breakTime);
+                    const breakEndTime = new Date();
+                    totalBreakTime += breakEndTime - breakStartTime;
+                }
+                if (attendance?.breaks) {
+                    attendance.breaks.forEach(breakItem => {
+                        const breakStartTime = new Date(breakItem.clockInTime);
+                        const breakEndTime = new Date(breakItem.clockOutTime);
+                        totalBreakTime += breakEndTime - breakStartTime;
+                    });
+                    setBreakTime(totalBreakTime);
+                }
+            }
+        }, 1000);
+        return () => clearInterval(bIntervalId);
+    }, [attendance]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-        if (clockInTime && attendance?.workingState === "WORKING") {
+        if (clockInTime && attendance?.attendanceDate && attendance?.workingState === "WORKING") {
             const currentTime = attendance.clockOutTime ? new Date(attendance.clockOutTime) : new Date();
             const elapsedTime = currentTime - clockInTime - breakTime;
             setWorkingTime(elapsedTime);
         }
     }, 1000);
-
     return () => clearInterval(intervalId);
   }, [clockInTime]);
 
@@ -200,26 +221,27 @@ function CalculateWorkingTime({ attendance }) {
     return `${hours}h ${minutes}m ${seconds}s`;
   };
 
-  return (
-    <div>
-      {clockInTime ? (
-        <Typography
-            color={attendance?.workingState !== "WORKING"?"primary":"inherit"}
-            variant="h5"
-            sx={{textAlign: "center"}}
-        >
+    return (
+        <Stack direction="column" spacing={2} alignItems="center">
             {
-                attendance?.workingState === "WORKING" && <>
-                { (workingTime > 0)?formatTime(workingTime):"0h 00m 00s" }
-                </>
+                (attendance?.attendanceDate && attendance?.workingState === "WORKING") && 
+                (<Stack direction="column" spacing={0} alignItems="center">
+                    <Typography variant="h5">
+                        { (workingTime > 0)?formatTime(workingTime):"0h 00m 00s" }
+                    </Typography>
+                    <Typography variant="">Working Time</Typography>
+                </Stack>)
             }
             {
-                attendance?.workingState !== "WORKING" ?
-                String(attendance?.workingState).replace(/\_/g, ' ')
-                :null
+                (attendance?.attendanceDate && attendance?.workingState === "ON_BREAK") && (
+                    <Stack direction="column" spacing={0} alignItems="center">
+                        <Typography variant="h5">
+                            { breakTime > 0?formatTime(breakTime):"0h 00m 00s" }
+                        </Typography>
+                        <Typography variant="">Break Time</Typography>
+                    </Stack>
+                )
             }
-        </Typography>
-      ):null}
-    </div>
-  );
+        </Stack>
+    );
 };

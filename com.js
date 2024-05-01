@@ -25,6 +25,24 @@ program
         }
     });
 
+program
+    .command('createTable <tableName> ')
+    .description('create tableName')
+    .action((tableName) => {
+        if (tableName) {
+            createTable(tableName);
+        }
+    });
+
+program
+    .command('createModel <modelName> <tableName>')
+    .description('create modelName')
+    .action((modelName, tableName) => {
+        if (modelName, tableName) {
+            createModel(modelName, tableName);
+        }
+    });
+
 program.parse(process.argv);
 
 
