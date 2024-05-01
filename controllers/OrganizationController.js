@@ -46,7 +46,6 @@ class OrganizationController extends Controller {
                 
             }
         }
-        console.log("req.body.data", req.body.data);
         let data = await OrganizationModel.save(req.body.data);
         if (data?._id) {
             return res.send({
@@ -56,9 +55,9 @@ class OrganizationController extends Controller {
             });
         }
         return res.send({
-            "status": "success",
+            "status": "failed",
             "code": "2",
-            "message": "error",
+            "message": "Server error",
             "errors": data
         });
     }

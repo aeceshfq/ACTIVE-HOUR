@@ -42,7 +42,8 @@ class AttendanceController extends Controller {
             for (let index = 0; index < attendanceRecords.length; index++) {
                 const record = attendanceRecords[index];
                 if (record && record.attendanceDate) {
-                    const date = moment(record.attendanceDate).format("YYYY-MM-DD");
+                    const date = moment(new Date(record.attendanceDate)).format("YYYY-MM-DD");
+                    console.log("date",date);
                     let findIndex = monthArray.findIndex(c => c.date == date);
                     if (findIndex > -1) {
                         let workingTimeMS = 0;
@@ -55,7 +56,6 @@ class AttendanceController extends Controller {
                             let attd = new Date(record.attendanceDate);
                             clockOutToday = new Date(attd.getFullYear(), attd.getMonth(), attd.getDate(), 23, 59, 59, 999);
                         }
-                        
                         let clockOutTime = record.clockOutTime?new Date(record.clockOutTime): clockOutToday;
                         if (clockOutTime) {
                             if (record.breaks && record.breaks.length) {
@@ -73,7 +73,6 @@ class AttendanceController extends Controller {
                         monthArray[findIndex]["status"] = record.status;
                         monthArray[findIndex]["workingStatus"] = record.workingStatus;
                         monthArray[findIndex]["record"] = {
-                            clockOutTimeclockOutTime: clockOutTime,
                             clockOutTime: record.clockOutTime,
                             clockInTime: record.clockInTime,
                             breakTime: record.breakTime,

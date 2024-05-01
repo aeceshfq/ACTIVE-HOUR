@@ -19,13 +19,34 @@ class organization_table {
                 validator: StringHelper.StringValidator,
                 message: "Name is required"
             },
-            set: function (name) {
-                return name.trim(); // Trims whitespace before saving
+            set: function (val) {
+                return val.trim();
+            },
+        },
+        ownerName: {
+            type: String,
+            default: null,
+            set: function (val) {
+                return val.trim();
+            },
+        },
+        businessEmail: {
+            type: String,
+            default: null,
+            validate: {
+                validator: StringHelper.EmailValidator,
+                message: "Email is invalid"
+            },
+            set: function (val) {
+                return val.trim();
             },
         },
         legalName: {
             type: String,
-            default: null
+            default: null,
+            set: function (val) {
+                return val.trim();
+            },
         },
         legalDocument: {
             type: Object,

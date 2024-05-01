@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import store from "store2";
 import { useMatch, useNavigate } from "react-router-dom";
 import route_names from "../routes/route_names";
 import AuthRoutes from "../auth/AuthRoutes";
