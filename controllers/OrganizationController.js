@@ -2,6 +2,7 @@
 
 const Controller = require("../app/Controller");
 const OrganizationModel = require("../models/OrganizationModel");
+const UserModel = require("../models/UserModel");
 
 class OrganizationController extends Controller {
     async get(req, res) {
@@ -32,6 +33,42 @@ class OrganizationController extends Controller {
     }
 
     async create(req, res) {
+        const user = await UserModel.findOne({ _id: req?.user?._id });
+        if (!user) {
+            return res.send({
+                "status": "failed",
+                "code": "3",
+                "message": "User not found"
+            });
+        }
+        let hasCounts = await OrganizationModel.count({
+            $or: [
+                {
+                    _id: user?.organizationId
+                },{
+                    userId: user?._id
+                },
+            ]
+        });
+        if (hasCounts > 0) {
+             let organization = await OrganizationModel.findOne({
+                $or: [
+                    {
+                        _id: user?.organizationId
+                    },{
+                        userId: user?._id
+                    },
+                ]
+            });
+            await UserModel.updateOne(req?.user?._id, {
+                organizationId: organization?._id
+            });
+            return res.send({
+                "status": "failed",
+                "code": "2",
+                "message": "The organization has already been created."
+            });
+        }
         if (!req.body.data) {
             return res.send({
                 "status": "failed",
@@ -39,15 +76,16 @@ class OrganizationController extends Controller {
                 "message": "{data} is required"
             });
         }
-        if (req?.user?._id) {
-            try {
-                req.body.data["userId"] = req?.user?._id;
-            } catch (error) {
-                
-            }
+        try {
+            req.body.data["userId"] = req?.user?._id;
+        } catch (error) {
+            
         }
         let data = await OrganizationModel.save(req.body.data);
         if (data?._id) {
+            await UserModel.updateOne(req?.user?._id, {
+                organizationId: data?._id
+            });
             return res.send({
                 "status": "success",
                 "code": "1",
