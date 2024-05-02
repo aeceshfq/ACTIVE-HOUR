@@ -115,4 +115,4 @@ class users_table {
     };
 }
 
-module.exports = new users_table;
+module.exports = new users_table();

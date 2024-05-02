@@ -40,6 +40,7 @@ program
     .action((modelName, tableName) => {
         if (modelName, tableName) {
             createModel(modelName, tableName);
+            createTable(tableName);
         }
     });
 
@@ -47,9 +48,8 @@ program.parse(process.argv);
 
 
 function createModel(modelName, tableName) {
-    let folderPath = path.join(__dirname, 'testing');
     let content = '';
-    folderPath = path.join(__dirname, 'models');
+    const folderPath = path.join(__dirname, 'models');
     try {
         modelName = `${modelName.replace(new RegExp("model", 'gi'), '').trim()}Model`;
     } catch (error) { }
@@ -75,9 +75,8 @@ module.exports = new ${modelName}();
 }
 
 function createControllerOnly(controllerName) {
-    let folderPath = path.join(__dirname, 'testing');
     let content = '';
-    folderPath = path.join(__dirname, 'controllers');
+    const folderPath = path.join(__dirname, 'controllers');
     try {
         controllerName = `${controllerName.replace(new RegExp("model", 'gi'), '').trim()}Controller`;
     } catch (error) { }
@@ -104,10 +103,9 @@ module.exports = ${controllerName};
 }
 
 function createController(controllerName) {
-    let folderPath = path.join(__dirname, 'testing');
     let modelName = String(controllerName);
     let content = '';
-    folderPath = path.join(__dirname, 'controllers');
+    const folderPath = path.join(__dirname, 'controllers');
     try {
         controllerName = `${controllerName.replace(new RegExp("model", 'gi'), '').trim()}Controller`;
     } catch (error) { }
@@ -200,10 +198,8 @@ module.exports = ${controllerName};
 }
 
 function createTable(tableName) {
-
-    let folderPath = path.join(__dirname, 'testing');
     let content = '';
-    folderPath = path.join(__dirname, 'databases');
+    let folderPath = path.join(__dirname, 'databases');
     try {
         tableName = `${tableName.replace(new RegExp("_table", 'gi'), '').trim()}`;
     } catch (error) { }
@@ -227,7 +223,7 @@ class ${tableName}_table {
     };
 }
 
-module.exports = new ${tableName}_table;
+module.exports = new ${tableName}_table();
 `;
     if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath, { recursive: true });

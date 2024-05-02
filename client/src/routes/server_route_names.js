@@ -14,10 +14,10 @@ const server_route_names = {
     "account.verify": "/auth/account/verify_user",
     "account.verify.token": "/auth/account/verify_token",
     "account.invitation.accept": "/auth/account/accept_invitation",
-    "attendance": "/api/attendance",
-    "attendance.signin": "/api/attendance/signin",
-    "attendance.signout": "/api/attendance/signout",
-    "attendance.status": "/api/attendance/status",
+    "attendance": "/attendance",
+    "attendance.signin": "/attendance/signin",
+    "attendance.signout": "/attendance/signout",
+    "attendance.status": "/attendance/status",
     "organization": "/api/organization"
 };
 

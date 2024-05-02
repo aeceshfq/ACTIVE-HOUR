@@ -64,4 +64,4 @@ class organization_table {
     };
 }
 
-module.exports = new organization_table;
+module.exports = new organization_table();

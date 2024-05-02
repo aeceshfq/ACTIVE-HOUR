@@ -51,4 +51,4 @@ class attendance_table {
     };
 }
 
-module.exports = new attendance_table;
+module.exports = new attendance_table();

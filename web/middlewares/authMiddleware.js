@@ -7,6 +7,7 @@ const authMiddleware = async (req, res, next) => {
         req.token = sessionToken;
         const verifyRequest = await VerifySession(sessionToken, sessionId).catch(e => e);
         if (verifyRequest?.status === "success" && verifyRequest?.user?._id) {
+            req.organizationId = verifyRequest?.user?.organizationId;
             req.user = verifyRequest?.user;
             req.sessionId = sessionId;
             req.sessionToken = sessionToken;

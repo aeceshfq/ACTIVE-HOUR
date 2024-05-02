@@ -12,7 +12,19 @@ module.exports = {
 	},
 	attendance: {
 		status: ["PRESENT", "ABSENT", "PRESENT_BUT_LATE", "LEAVE", "DAY_OFF"],
-		workingState: ["WORKING", "ON_BREAK", "IDLE", "TRAINING", "MEETING", "SIGNED_OUT"]
+		workingState: ["WORKING", "ON_BREAK", "IDLE", "TRAINING", "MEETING", "SIGNED_OUT"],
+		policies: {
+			rule: {
+				type: ['THRESHOLD', 'ACCRUAL', 'OVERTIME'],
+				unit: ["MINUTES","HOURS","DAYS","WEEKS","MONTHS","YEARS","SHIFTS","OCCURRENCES","PERCENTAGE","CUSTOM"]
+			},
+			condition: {
+				type: ["TIME", "DAY_OF_THE_WEEK","HOLIDAY","MONTH","DATE_RANGE","EMPLOYMENT_STATUS","CUSTOM"]
+			},
+			action: {
+				type: ["PENALTY","NOTIFICATION","REWARD","ADJUSTMENT","CUSTOM"]
+			}
+		}
 	},
 	employeeDesignations: [
 		null,
@@ -54,5 +66,6 @@ module.exports = {
 		"SUPPORT_SPECIALIST", // Support Specialist
 		"COMMUNICATIONS_SPECIALIST" // Communications Specialist
 	],
-	employeeRange: ["0-10", "11-50", "51-500", "501+"]
+	employeeRange: ["1-10", "11-50", "51-200", "201-500", "501-1000", "1001-5000", "5001-10000", "10001+"],
+
 };

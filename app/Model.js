@@ -55,115 +55,6 @@ class Model {
             throw new Error("Database is not defined");
         }
     }
-    prepareQuery(req) {
-        let query = {
-            "$and": []
-        };
-        let fields = {};
-        let sort = { title: 1 };
-        var page = parseInt(1);
-        let limit = parseInt(100);
-        if (req.query.page && !isNaN(parseInt(req.query.page)) && parseInt(req.query.page) > 0) {
-            page = parseInt(req.query.page);
-        }
-        if (req.query.limit && !isNaN(parseInt(req.query.limit))) {
-            limit = parseInt(req.query.limit);
-        }
-        if (limit > 100) limit = 100;
-        for (const key in req.query) {
-            if (req.query.hasOwnProperty(key)) {
-                const value = req.query[key];
-                if (!value) {
-                    continue;
-                }
-                if (key === "limit" || key === "page" || key === "sort" || key === "qMatchWith") {
-                    continue;
-                }
-                if (key === "q") {
-                    if (req.query.hasOwnProperty("qMatchWith")) {
-                        let mw = [];
-                        String(req.query?.qMatchWith).split(",")?.forEach(x => {
-                            if (value && String(value).trim() !== "" && typeof value === "string") {
-                                mw.push({
-                                    [x]: { $regex: value, $options: "i" }
-                                })
-                            }
-                        });
-                        if (mw.length > 0) {
-                            query["$and"].push({
-                                "$or": mw
-                            });
-                        }
-                    }
-                }
-                else if (key === "fields") {
-                    value.split(",").forEach(r => {
-                        fields[r] = 1;
-                    });
-                }
-                else if (key === "deselect") {
-                    // value.split(",").forEach(r => {
-                    //     fields[r] = 0;
-                    // });
-                }
-                else {
-                    if (String(key).indexOf(".") > -1) {
-                        let column = String(key).split(".")[0];
-                        let expression = String(key).split(".")[1];
-                        if (expression === "disjunction") { // if OR operator is used in query
-                            let disjunctionQuery = [];
-                            for (const disjunctionKey in query[column]) {
-                                let disjunctionValue = query[column][disjunctionKey];
-                                disjunctionQuery.push({
-                                    [column]: {
-                                        [disjunctionKey]: disjunctionValue
-                                    }
-                                });
-                            }
-                            if (disjunctionQuery.length > 0) {
-                                query["$and"].push({
-                                    "$or": disjunctionQuery
-                                });
-                            }
-                            try {
-                                delete query[column];
-                            } catch (error) {
-
-                            }
-                        }
-                        else {
-                            let v = !isNaN(value) ? Number(value) : value;
-                            if (query.hasOwnProperty(column)) {
-                                query[column][expression] = v;
-                            }
-                            else {
-                                query[column] = {
-                                    [expression]: v
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        query[key] = !isNaN(value) ? Number(value) : value;
-                    }
-                }
-            }
-        }
-        if (query["$and"].length === 0) {
-            try {
-                delete query.$and;
-            } catch (error) {
-
-            }
-        }
-        return {
-            fields,
-            query,
-            sort,
-            limit,
-            page
-        }
-    }
     async count(query) {
         try {
             const count = await this.db.count(query);
@@ -173,14 +64,6 @@ class Model {
                 error: error
             };
         }
-    }
-    async countAll() {
-        const count = await this.db.count({}).catch(e => e);
-        return count;
-    }
-    async all() {
-        const data = await this.db.find({}).catch(e => e);
-        return data;
     }
     async lookup(req) {
         const { query, fields, page, limit, sort } = this.prepareQuery(req);
@@ -230,11 +113,15 @@ class Model {
         return data;
     }
     async get(_id) {
-        const data = await this.db.find({ _id: _id }).catch(e => e);
+        const data = await this.db.findOne({ _id: _id }).catch(e => e);
         return data;
     }
     async findByQuery(query, fields) {
         const data = await this.db.find(query, fields).catch(e => e);
+        return data;
+    }
+    async findOneByQuery(query, fields) {
+        const data = await this.db.findOne(query, fields).catch(e => e);
         return data;
     }
     async findOrFirst(query, fields) {
@@ -315,14 +202,21 @@ class Model {
         return updated;
     }
     async updateOneOrInsert(query, data) {
-        const count = await this.count(query).catch(e => e);
-        if (count >= 1) {
-            await this.db.updateOne(query, data);
-            const new_data = await this.db.findOne(query).catch(e => e);
-            return new_data;
-        } else {
-            const updated = await this.save(data).catch(e => e);
-            return updated;
+        try {
+            var result = await this.db.bulkWrite([
+                {
+                    updateOne: {
+                        filter: query,
+                        update: data,
+                        upsert: true,
+                    }
+                }
+            ]);
+            return result;
+        } catch (error) {
+            return {
+                error: error
+            };
         }
     }
     async bulkUpdateOrInsert(data) {
@@ -374,7 +268,7 @@ class Model {
         const data = await this.db.deleteOne({ _id: _id }).catch(e => e);
         return data;
     }
-    async deleteByQuery(query) {
+    async deleteOneByQuery(query) {
         const data = await this.db.deleteOne(query).catch(e => e);
         return data;
     }

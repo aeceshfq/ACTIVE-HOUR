@@ -17,4 +17,4 @@ class department_table {
     };
 }
 
-module.exports = new department_table;
+module.exports = new department_table();

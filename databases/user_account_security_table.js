@@ -36,4 +36,4 @@ class user_account_security_table {
     };
 }
 
-module.exports = new user_account_security_table;
+module.exports = new user_account_security_table();

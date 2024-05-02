@@ -44,4 +44,4 @@ class auth_session_table {
     };
 }
 
-module.exports = new auth_session_table;
+module.exports = new auth_session_table();

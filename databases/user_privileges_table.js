@@ -23,4 +23,4 @@ class user_privileges_table {
 	};
 }
 
-module.exports = new user_privileges_table; user_privileges_table; user_privileges_table; user_privileges_table;
+module.exports = new user_privileges_table();
