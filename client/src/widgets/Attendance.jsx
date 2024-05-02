@@ -1,5 +1,5 @@
 import { Alert, Button, Skeleton, Stack, Typography } from "@mui/material";
-import { FormatDate } from "../functions/dates";
+import { DateTimeNow, FormatDate } from "../functions/dates";
 import { useFetch, useRequest } from "../providers/AppProvider";
 import server_route_names from "../routes/server_route_names";
 import LegacyCard from "../subcomponents/LegacyCard";
@@ -10,7 +10,7 @@ import LegacyModal from "../subcomponents/LegacyModal";
 
 export default function Attendance(){
     const { user, logout } = useAuth();
-    let today = FormatDate(new Date());
+    let today = DateTimeNow().date;
     const { data: attendance, fetching: loading, reFetch } = useFetch(`${server_route_names.attendance}?date=${today}`);
     const { data: attendanceRecord, loading: attendanceLoading, sendRequest: updateAttendance } = useRequest();
     const [signOutAlert, setSignOutAlert] = useState(false);
@@ -21,21 +21,37 @@ export default function Attendance(){
         }
     }, [attendanceRecord]);
 
+    const signIn = async () => {
+        let dateTime = DateTimeNow();
+        await updateAttendance({
+            url: `${server_route_names["attendance.signin"]}`,
+            type: "post",
+            data: {
+                userId: user?._id,
+                attendanceDate: today,
+                clockInTime: dateTime.iso,
+                dateTime: dateTime.iso
+            }
+        });
+    }
+
     const signOut = async () => {
+        let dateTime = DateTimeNow();
         await updateAttendance({
             url: `${server_route_names["attendance.signout"]}`,
             type: "post",
             data: {
                 userId: user?._id,
                 attendanceDate: today,
-                clockOutTime: new Date(),
-                dateTime: new Date()
+                clockOutTime: dateTime.iso,
+                dateTime: dateTime.iso
             }
         });
         logout();
     }
 
     const changeWorkingState = async (workingState) => {
+        let dateTime = DateTimeNow();
         await updateAttendance({
             url: `${server_route_names["attendance.status"]}`,
             type: "post",
@@ -43,7 +59,7 @@ export default function Attendance(){
                 userId: user?._id,
                 attendanceDate: today,
                 workingState: workingState,
-                dateTime: new Date()
+                dateTime: dateTime.iso
             }
         });
     }
@@ -126,18 +142,7 @@ export default function Attendance(){
                                 (!attendance) && <Button
                                     variant="contained"
                                     disabled={attendanceLoading}
-                                    onClick={async () => {
-                                        await updateAttendance({
-                                            url: `${server_route_names["attendance.signin"]}`,
-                                            type: "post",
-                                            data: {
-                                                userId: user?._id,
-                                                attendanceDate: today,
-                                                clockInTime: new Date(),
-                                                dateTime: new Date()
-                                            }
-                                        });
-                                    }}
+                                    onClick={signIn}
                                 >Sign in</Button>
                             }
                             {

@@ -99,3 +99,14 @@ export function FormatDate(date){
   }
   return null;
 }
+
+export function DateTimeNow(){
+  let now = new Date();
+  let dateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds(), 0);
+  return {
+    dateTime: dateTime,
+    iso: dateTime.toISOString(),
+    date: moment(dateTime).format("YYYY-MM-DD"),
+    time: moment(dateTime).format("hh:mm:ss"),
+  };
+}

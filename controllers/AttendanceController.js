@@ -43,16 +43,12 @@ class AttendanceController extends Controller {
                 const record = attendanceRecords[index];
                 if (record && record.attendanceDate) {
                     const date = moment(new Date(record.attendanceDate)).format("YYYY-MM-DD");
-                    console.log("date",date);
                     let findIndex = monthArray.findIndex(c => c.date == date);
                     if (findIndex > -1) {
                         let workingTimeMS = 0;
                         let breakTimeMS = 0;
                         let clockOutToday = new Date();
-                        if (moment(new Date()).format("YYYY-MM-DD") == moment(record.attendanceDate).format("YYYY-MM-DD")) {
-                            // clockOutToday = new Date();
-                        }
-                        else{
+                        if (moment(new Date()).format("YYYY-MM-DD") !== moment(record.attendanceDate).format("YYYY-MM-DD")) {
                             let attd = new Date(record.attendanceDate);
                             clockOutToday = new Date(attd.getFullYear(), attd.getMonth(), attd.getDate(), 23, 59, 59, 999);
                         }
@@ -66,13 +62,14 @@ class AttendanceController extends Controller {
                                     }
                                 }
                             }
-                            workingTimeMS = clockOutToday - new Date(record.clockInTime) - breakTimeMS;
+                            workingTimeMS = clockOutTime - new Date(record.clockInTime) - breakTimeMS;
                         }
                         monthArray[findIndex]["workingMinutes"] = Math.floor(workingTimeMS / (1000 * 60));
                         monthArray[findIndex]["breakMinutes"] = Math.floor(breakTimeMS / (1000 * 60));
                         monthArray[findIndex]["status"] = record.status;
                         monthArray[findIndex]["workingStatus"] = record.workingStatus;
                         monthArray[findIndex]["record"] = {
+                            attendanceDate: record.attendanceDate,
                             clockOutTime: record.clockOutTime,
                             clockInTime: record.clockInTime,
                             breakTime: record.breakTime,
