@@ -127,9 +127,7 @@ class AttendanceController extends Controller {
         let query = {userId};
         if (attendanceDate) {
             query = {...query, ...{
-                $expr: {
-                    $eq: [{ $dateToString: { format: '%Y-%m-%d', date: '$attendanceDate' } }, attendanceDate]
-                }
+                attendanceDate: { $eq: attendanceDate }
             }};
         }
         let data = await AttendanceModel.updateOneOrInsert(query, {
@@ -158,9 +156,7 @@ class AttendanceController extends Controller {
         let query = {userId};
         if (attendanceDate) {
             query = {...query, ...{
-                $expr: {
-                    $eq: [{ $dateToString: { format: '%Y-%m-%d', date: '$attendanceDate' } }, attendanceDate]
-                }
+                attendanceDate: { $eq: attendanceDate }
             }};
         }
         let data = await AttendanceModel.updateOneOrInsert(query, {
@@ -188,9 +184,7 @@ class AttendanceController extends Controller {
         let query = {userId};
         if (attendanceDate) {
             query = {...query, ...{
-                $expr: {
-                    $eq: [{ $dateToString: { format: '%Y-%m-%d', date: '$attendanceDate' } }, attendanceDate]
-                }
+                attendanceDate: { $eq: attendanceDate }
             }};
         }
         let update = {
@@ -238,9 +232,7 @@ class AttendanceController extends Controller {
         let query = {userId};
         if (attendanceDate) {
             query = {...query, ...{
-                $expr: {
-                    $eq: [{ $dateToString: { format: '%Y-%m-%d', date: '$attendanceDate' } }, attendanceDate]
-                }
+                attendanceDate: { $eq: attendanceDate }
             }};
         }
         let data = await AttendanceModel.updateOneOrInsert(query, req.body);

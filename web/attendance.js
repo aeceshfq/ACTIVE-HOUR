@@ -4,7 +4,7 @@ const AttendancePolicyController = require('../controllers/AttendancePolicyContr
 const AttendancePolicyRuleController = require('../controllers/AttendancePolicyRuleController');
 const AttendancePolicyConditionModel = require('../controllers/AttendancePolicyConditionController');
 const AttendancePolicyActionController = require('../controllers/AttendancePolicyActionController');
-const { AttendancePolicyMiddleware, AttendanceRuleMiddleware } = require('./middlewares/attendanceMiddleware');
+const { AttendancePolicyMiddleware, AttendancePolicyRuleMiddleware } = require('./middlewares/attendanceMiddleware');
 const { organizationMiddleware } = require('./middlewares/organizationMiddleware');
 
 const Attendance = new AttendanceController();
@@ -35,14 +35,14 @@ request.route('/policies/rules')
 .delete(AttendancePolicyRule.delete);
 
 request.route('/policies/rules/conditions')
-.all(AttendanceRuleMiddleware)
+.all(AttendancePolicyRuleMiddleware)
 .get(AttendancePolicyCondition.get)
 .post(AttendancePolicyCondition.create)
 .put(AttendancePolicyCondition.update)
 .delete(AttendancePolicyCondition.delete);
 
 request.route('/policies/rules/actions')
-.all(AttendanceRuleMiddleware)
+.all(AttendancePolicyRuleMiddleware)
 .get(AttendancePolicyAction.get)
 .post(AttendancePolicyAction.create)
 .put(AttendancePolicyAction.update)

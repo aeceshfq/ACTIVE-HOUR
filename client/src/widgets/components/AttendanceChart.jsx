@@ -8,12 +8,17 @@ const AttendanceGraph = ({ attendanceRecords, monthTitle }) => {
   useEffect(() => {
     if (attendanceRecords && attendanceRecords.length > 0) {
         const data = attendanceRecords.map(record => {
-            const totalHours = (record.workingMinutes + record.breakMinutes) / 60; // Calculate total hours
-            // const workingHours = record.workingMinutes / 60; // Calculate working hours
-            // const breakHours = record.breakMinutes / 60; // Calculate break hours
+            const totalHours = (record.workingMinutes + record.breakMinutes) / 60;
+            const workingHours = record.workingMinutes / 60;
+            const breakHours = record.breakMinutes / 60;
             return {
+                clockOutTime: record.clockOutTime,
+                clockInTime: record.clockInTime,
+                // clockInTime: record.clockInTime,
                 date: record.date,
                 totalHours: totalHours,
+                workingHours: workingHours,
+                breakHours: breakHours,
                 status: record.status
             };
         });
@@ -50,6 +55,23 @@ const AttendanceGraph = ({ attendanceRecords, monthTitle }) => {
                 plugins: {
                     legend: {
                         display: false // Hide legend
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                const record = data[context.dataIndex];
+                                console.log("record", record);
+                                let tooltipText = `Total Hours: ${record.totalHours} hrs\n`;
+                                tooltipText += `Clock In: ${record.clockInTime}\n`;
+                                tooltipText += `Clock Out: ${record.clockOutTime}\n`;
+                                tooltipText += `Total worked Hours: ${record.workingHours}\n`;
+                                tooltipText += `Break Hours: ${record.breakHours}\n`;
+                                tooltipText += `Status: ${record.status}\n`;
+                                return tooltipText;
+                            }
+                        }
                     }
                 }
             },

@@ -11,7 +11,7 @@ module.exports = {
 		}
 	},
 	attendance: {
-		status: ["PRESENT", "ABSENT", "PRESENT_BUT_LATE", "LEAVE", "DAY_OFF"],
+		status: ["PRESENT", "ABSENT", "LATE", "ON_LEAVE"],
 		workingState: ["WORKING", "ON_BREAK", "IDLE", "TRAINING", "MEETING", "SIGNED_OUT"],
 		policies: {
 			rule: {
@@ -19,11 +19,12 @@ module.exports = {
 				unit: ["MINUTES","HOURS","DAYS","WEEKS","MONTHS","YEARS","SHIFTS","OCCURRENCES","PERCENTAGE","CUSTOM"]
 			},
 			condition: {
-				type: ["TIME", "DAY_OF_THE_WEEK","HOLIDAY","MONTH","DATE_RANGE","EMPLOYMENT_STATUS","CUSTOM"]
+				type: ["DAY_OF_THE_WEEK","HOLIDAY","MONTH","DATE_RANGE","EMPLOYMENT_STATUS","CUSTOM"]
 			},
 			action: {
-				type: ["PENALTY","NOTIFICATION","REWARD","ADJUSTMENT","CUSTOM"]
-			}
+				type: ["PENALTY","NOTIFICATION","REWARD","ADJUSTMENT","CUSTOM"],
+				value: ["DEDUCT_SALARY","SEND_EMAIL_ALERT","GENERATE_WARNING_LETTER","APPLY_DISCIPLINARY_ACTION","UPDATE_ATTENDANCE_RECORD","ASSIGN_ADDITIONAL_WORK","SCHEDULE_COUNSELING_SESSION","PROVIDE_TRAINING","REWARD","NO_ACTION"]
+			},
 		}
 	},
 	employeeDesignations: [

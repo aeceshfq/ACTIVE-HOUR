@@ -30,7 +30,7 @@ const AttendancePolicyMiddleware = async(req, res, next) => {
     }
 }
 
-const AttendanceRuleMiddleware = async(req, res, next) => {
+const AttendancePolicyRuleMiddleware = async(req, res, next) => {
     let errors = [];
     try {
         const policyId = req.query?.policyId??req?.policyId;
@@ -65,5 +65,5 @@ const AttendanceRuleMiddleware = async(req, res, next) => {
 }
 
 module.exports = {
-    AttendancePolicyMiddleware, AttendanceRuleMiddleware
+    AttendancePolicyMiddleware, AttendancePolicyRuleMiddleware
 };

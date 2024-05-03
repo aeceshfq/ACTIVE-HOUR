@@ -5,8 +5,10 @@ const AttendancePolicyActionModel = require("../models/AttendancePolicyActionMod
 
 class AttendancePolicyActionController extends Controller {
     async get(req, res) {
-        let query = this.query(req);
-        let data = await AttendancePolicyActionModel.findOne(query);
+        let query = {
+            ruleId: req.ruleId,
+        };
+        let data = await AttendancePolicyActionModel.findAll(query);
         return res.send({
             "status": "success",
             "code": "1",
@@ -22,6 +24,7 @@ class AttendancePolicyActionController extends Controller {
                 "message": "{id} and {data} fields are required"
             });
         }
+        req.body.data["ruleId"] = req?.ruleId;
         let data = await AttendancePolicyActionModel.updateOne(req.query.id, req.body.data);
         return res.send({
             "status": "success",
@@ -38,6 +41,7 @@ class AttendancePolicyActionController extends Controller {
                 "message": "{data} is required"
             });
         }
+        req.body.data["ruleId"] = req?.ruleId;
         let data = await AttendancePolicyActionModel.save(req.body.data);
         if (data?._id) {
             return res.send({
@@ -49,7 +53,7 @@ class AttendancePolicyActionController extends Controller {
         return res.send({
             "status": "failed",
             "code": "2",
-            "message": "error",
+            "message": data?.message,
             "errors": data
         });
     }
@@ -62,7 +66,7 @@ class AttendancePolicyActionController extends Controller {
                 "message": "{id} is required"
             });
         }
-        let data = await AttendancePolicyActionModel.deleteOne(req.query.id);
+        let data = await AttendancePolicyActionModel.deleteOneByQuery({_id:req.query.id, ruleId: req?.ruleId});
         return res.send({
             "status": "success",
             "code": "1",

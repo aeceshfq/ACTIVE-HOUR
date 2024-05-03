@@ -17,6 +17,7 @@ class attendance_policy_action_table {
         },
         value: {
             type: String,
+            enum: _enum.attendance.policies.action.value,
             required: true,
         },
         threshold: {
